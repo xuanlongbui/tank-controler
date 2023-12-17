@@ -14,6 +14,7 @@
 #include <AsyncTCP.h>
 #include <ESPAsyncWebServer.h>
 #include <AsyncJson.h>
+#include <ESPmDNS.h>
 
 // Replace with your network credentials
 const char *ssid = "Hn";
@@ -55,7 +56,7 @@ const char index_html[] PROGMEM = R"rawliteral(
       touch-action: manipulation;
     }
 
-    .noselect {
+    * {
       -webkit-touch-callout: none;
       /* iOS Safari */
       -webkit-user-select: none;
@@ -143,16 +144,22 @@ const char index_html[] PROGMEM = R"rawliteral(
       'speed1': 50,
       'speed2': 50
     }
-    function driectControl(param) {
+    async function driectControl(param) {
       obj.direct = param;
-      let xhr = new XMLHttpRequest();
-      let url = "control";
-      xhr.open("POST", url, true);
-      xhr.setRequestHeader("Content-Type", "application/json");
       console.log(obj);
-      var data = JSON.stringify(obj);
-      xhr.send(data);
-
+      
+      try {
+          const response = await fetch("http://tankServer.local/control", {
+            method: "POST",
+            body: JSON.stringify(obj),
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+        } catch (error) {
+          alert("Request failed - check the console");
+          console.error(error);
+        }
     }
     function speedControl1() {
       var sliderValue = document.getElementById("pwmSlider1").value;
@@ -285,7 +292,7 @@ void setup()
     delay(1000);
     Serial.println("Connecting to WiFi..");
   }
-
+  MDNS.begin("tankServer");
   // Print ESP Local IP Address
   Serial.println(WiFi.localIP());
 
