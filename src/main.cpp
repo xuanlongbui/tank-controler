@@ -198,11 +198,6 @@ const char index_html[] PROGMEM = R"rawliteral(
 // Replaces placeholder with button section in your web page
 String processor(const String &var)
 {
-  // Serial.println(var);
-  if (var == "SLIDERVALUE")
-  {
-    return sliderValue;
-  }
   return String();
 }
 
