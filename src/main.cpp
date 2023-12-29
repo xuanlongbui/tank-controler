@@ -34,9 +34,9 @@ int motor2Pin2 = 18;
 int enable1Pin2 = 16;
 
 // Setting PWM properties
-const int freq = 30000;
+const int freq = 5000;
 const int pwmChannel1 = 0;
-const int pwmChannel2 = 0;
+const int pwmChannel2 = 1;
 const int resolution = 8;
 int dutyCycle = 200;
 
@@ -53,6 +53,9 @@ void controlStop()
   // motor 2
   digitalWrite(motor2Pin1, LOW);
   digitalWrite(motor2Pin2, LOW);
+    ledcWrite(pwmChannel1, 0);
+  ledcWrite(pwmChannel2, 0);
+  Serial.println("stop");
 }
 void controlForward()
 {
@@ -66,6 +69,7 @@ void controlForward()
 
   ledcWrite(pwmChannel1, speed1);
   ledcWrite(pwmChannel2, speed2);
+  Serial.println("forward");
 }
 void controlBackward()
 {
@@ -78,6 +82,7 @@ void controlBackward()
 
   ledcWrite(pwmChannel1, speed1);
   ledcWrite(pwmChannel2, speed2);
+  Serial.println("backward");
 }
 void controlRight()
 {
@@ -90,6 +95,8 @@ void controlRight()
 
   ledcWrite(pwmChannel1, speed1);
   ledcWrite(pwmChannel2, speed2);
+  Serial.println("right");
+
 }
 void controlLeft()
 {
@@ -102,6 +109,8 @@ void controlLeft()
 
   ledcWrite(pwmChannel1, speed1);
   ledcWrite(pwmChannel2, speed2);
+  Serial.println("left");
+
 }
 
 void setup()
@@ -144,17 +153,14 @@ void setup()
 
     if (strcmp(jsonObj["direct"],"stop") == 0)
     {
-      Serial.println("stop");
       direction = 0;
     }
     else if (strcmp(jsonObj["direct"],"forward") == 0)
     {
-      Serial.println("forward");
       direction = 1;
     }
     else if (strcmp(jsonObj["direct"],"backward") == 0)
     {
-      Serial.println("backward");
       direction = 2;
     }
     else if (strcmp(jsonObj["direct"],"right") == 0)
@@ -164,7 +170,6 @@ void setup()
     }
     else if (strcmp(jsonObj["direct"],"left") == 0)
     {
-      Serial.println("left");
       direction = 4;
     }
     else
