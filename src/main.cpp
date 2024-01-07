@@ -53,7 +53,7 @@ void controlStop()
   // motor 2
   digitalWrite(motor2Pin1, LOW);
   digitalWrite(motor2Pin2, LOW);
-    ledcWrite(pwmChannel1, 0);
+  ledcWrite(pwmChannel1, 0);
   ledcWrite(pwmChannel2, 0);
   Serial.println("stop");
 }
@@ -96,7 +96,6 @@ void controlRight()
   ledcWrite(pwmChannel1, speed1);
   ledcWrite(pwmChannel2, speed2);
   Serial.println("right");
-
 }
 void controlLeft()
 {
@@ -110,7 +109,6 @@ void controlLeft()
   ledcWrite(pwmChannel1, speed1);
   ledcWrite(pwmChannel2, speed2);
   Serial.println("left");
-
 }
 
 void setup()
@@ -134,12 +132,20 @@ void setup()
   ledcAttachPin(enable1Pin2, pwmChannel2);
   SPIFFS.begin();
   // Connect to Wi-Fi
-  WiFi.begin(ssid, password);
-  while (WiFi.status() != WL_CONNECTED)
-  {
-    delay(1000);
-    Serial.println("Connecting to WiFi..");
-  }
+  // WiFi.begin(ssid, password);
+  // while (WiFi.status() != WL_CONNECTED)
+  // {
+  //   delay(1000);
+  //   Serial.println("Connecting to WiFi..");
+  // }
+  // Connect to Wi-Fi network with SSID and password
+  Serial.println("Setting AP (Access Point)");
+  // NULL sets an open Access Point
+  WiFi.softAP("ESP-WIFI", NULL);
+
+  IPAddress IP = WiFi.softAPIP();
+  Serial.print("AP IP address: ");
+  Serial.println(IP);
   MDNS.begin("tankServer");
   // Print ESP Local IP Address
   Serial.println(WiFi.localIP());
